@@ -1,27 +1,20 @@
-# Use an official lightweight Python image
-FROM python:3.12-slim
+# Use official Python image
+FROM python:3.12
 
-# Install Tesseract-OCR and necessary dependencies
-RUN apt-get update && apt-get install -y \
-    tesseract-ocr \
-    libtesseract-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy all files into the container
-COPY . .
+# Copy project files
+COPY . /app
 
-# Install required Python packages
+# Install system dependencies (Tesseract OCR)
+RUN apt-get update && apt-get install -y tesseract-ocr
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Ensure Tesseract is correctly set up
-ENV TESSERACT_PATH="/usr/bin/tesseract"
-RUN echo "Tesseract path: $TESSERACT_PATH"
-
 # Expose the port Flask runs on
-EXPOSE 5000
+EXPOSE 8080
 
 # Run the Flask app
-CMD ["python", "app.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
