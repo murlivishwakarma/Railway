@@ -7,9 +7,17 @@ import concurrent.futures
 import os
 
 
-# Set the correct Tesseract path
-pytesseract.pytesseract.tesseract_cmd = "./bin/Tesseract-OCR/tesseract"
+import subprocess
 
+
+# Get the correct Tesseract path
+tesseract_path = subprocess.run(["which", "tesseract"], capture_output=True, text=True).stdout.strip()
+
+# Debugging: Print Tesseract path in logs
+print("🛠️ Tesseract Installed At:", tesseract_path)
+
+# Set the Tesseract path in Pytesseract
+pytesseract.pytesseract.tesseract_cmd = tesseract_path if tesseract_path else "/usr/bin/tesseract"
 
 
 app = Flask(__name__)
