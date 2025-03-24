@@ -8,7 +8,8 @@ import os
 
 
 # Set the correct Tesseract path
-pytesseract.pytesseract.tesseract_cmd = r"./bin/Tesseract-OCR/tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+
 
 app = Flask(__name__)
 
